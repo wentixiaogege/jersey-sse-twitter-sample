@@ -40,11 +40,11 @@
 
 package org.glassfish.jersey.sample.sse;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.net.URI;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+import org.glassfish.jersey.media.sse.EventSource;
+import org.glassfish.jersey.media.sse.InboundEvent;
+
 import javax.servlet.AsyncContext;
 import javax.servlet.AsyncEvent;
 import javax.servlet.AsyncListener;
@@ -54,14 +54,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientFactory;
+import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.MediaType;
-
-import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
-import org.glassfish.jersey.media.sse.EventSource;
-import org.glassfish.jersey.media.sse.InboundEvent;
-import org.glassfish.jersey.media.sse.OutboundEventWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.URI;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * A test client to use Jersey 2.0 EventSource client apis for ServerSentEvents
@@ -145,8 +144,8 @@ public class TestClient extends HttpServlet {
 
         @Override
         public void run() {
-            Client client = ClientFactory.newClient();
-            client.configuration().register(OutboundEventWriter.class);
+            Client client = ClientBuilder.newClient();
+            //client.configuration().register(OutboundEventWriter.class);
             context.getResponse().setContentType("text/html");
             final javax.ws.rs.client.WebTarget webTarget;
             try {
@@ -158,10 +157,10 @@ public class TestClient extends HttpServlet {
                 out.println("</head>");
                 out.println("<body>");
                 out.println("<h1>");
-                out.println("All good tweets");
+                out.println("Glassfish tweets");
                 out.println("</h1>");
-
-                EventSource eventSource = new EventSource(webTarget, executorService) {
+               // EventSource eventSource = new EventSource(webTarget, executorService) {
+                EventSource eventSource = new EventSource(webTarget) {
                     @Override
                     public void onEvent(InboundEvent inboundEvent) {
                         try {

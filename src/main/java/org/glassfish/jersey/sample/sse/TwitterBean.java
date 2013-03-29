@@ -43,16 +43,13 @@ import javax.ejb.Schedule;
 import javax.ejb.Stateless;
 import javax.inject.Named;
 import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientFactory;
+import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.WebTarget;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
 /**
  * This is a Schedule based Timer which will get tweets information from Twitter and send as Server
@@ -63,27 +60,21 @@ import java.util.Random;
 @Named
 public class TwitterBean {
 
+   private final static String SEARCH_URL =
+              "http://search.twitter.com/search.json?q=glassfish&rpp=5&include_entities=true" +
+                      "&with_twitter_user_id=true&result_type=mixed";
+
 
     private final static String TARGET_URI= "http://localhost:8080/jersey-sse-twitter-sample";
 
     @Schedule(hour="*", minute="*", second="*/10")
     public void sendTweets() {
 
-        Client client = ClientFactory.newClient();
+        Client client = ClientBuilder.newClient();
         try {
             WebTarget webTarget= client.target(new URI(TARGET_URI)) ;
-            List<String> list = new ArrayList<String>();
-            list.add("glassfish");
-            list.add("gf_jersey");
-            list.add("websockets");
-            list.add("java");
-            list.add("MasoudKalali");
-            Random rg = new Random();
-            String randomElement;
-            int listSize = list.size();
-            randomElement = list.get(rg.nextInt(listSize));
-            System.out.println("String" +randomElement);
-            String message = getFeedData(randomElement);
+
+            String message = getFeedData();
             System.out.println("Posting message");
             webTarget.path("twittersse").request().post(Entity.text(message));
         } catch (URISyntaxException e) {
@@ -92,12 +83,10 @@ public class TwitterBean {
     }
 
 
-private  String getFeedData(String input) {
-    StringBuilder sb = new StringBuilder();
-    String searchURL ="http://search.twitter.com/search.json?q="+input+"&rpp=5&include_entities=true" +
-            "&with_twitter_user_id=true&result_type=mixed";
+private  String getFeedData() {
+        StringBuilder sb = new StringBuilder();
         try {
-            URL twitter = new URL(searchURL);
+            URL twitter = new URL(SEARCH_URL);
             URLConnection yc = null;
 
             yc = twitter.openConnection();

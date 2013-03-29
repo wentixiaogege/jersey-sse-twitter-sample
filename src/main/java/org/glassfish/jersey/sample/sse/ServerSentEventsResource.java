@@ -48,8 +48,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-import org.glassfish.jersey.media.sse.EventChannel;
+import org.glassfish.jersey.media.sse.EventOutput;
 import org.glassfish.jersey.media.sse.OutboundEvent;
+import org.glassfish.jersey.media.sse.SseFeature;
 
 /**
  * This is a resource which will produce the ServerSentEvents
@@ -58,11 +59,11 @@ import org.glassfish.jersey.media.sse.OutboundEvent;
 @Path("twittersse")
 public class ServerSentEventsResource {
 
-       static EventChannel eventChannel= new EventChannel();
+       static EventOutput eventChannel= new EventOutput();
 
        @GET
-       @Produces(EventChannel.SERVER_SENT_EVENTS)
-       public EventChannel getMessage() {
+       @Produces(SseFeature.SERVER_SENT_EVENTS)
+       public EventOutput getMessage() {
            return eventChannel;
        }
 

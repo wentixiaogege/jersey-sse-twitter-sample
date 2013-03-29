@@ -7,6 +7,7 @@ To run the sample just do a
 
 >mvn clean install 
 
+Deploy the application in GlassFish and hit http://localhost:8080/jersey-sse-twitter-sample/TestClient
 which will build the web application archive (war) which can be deployed to the latest build of GlassFish application server available at:
 http://dlc.sun.com.edgesuite.net/glassfish/4.0/
 

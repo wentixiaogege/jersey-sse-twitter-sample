@@ -41,7 +41,8 @@ package org.glassfish.jersey.sample.sse;
 import java.util.HashSet;
 import java.util.Set;
 import javax.ws.rs.core.Application;
-import org.glassfish.jersey.media.sse.OutboundEventWriter;
+
+import org.glassfish.jersey.media.sse.SseFeature;
 
 /**
  *  This is an Application subclass which registers
@@ -53,7 +54,7 @@ public class MyApplication extends Application {
 
     Set<Class<?>> classes = new HashSet<Class<?>>() {
         { add(ServerSentEventsResource.class);
-            add(OutboundEventWriter.class);
+            add(SseFeature.class);
         }};
 
     @Override
